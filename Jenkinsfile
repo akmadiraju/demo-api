@@ -4,6 +4,10 @@ pipeline {
         CC = 'clang'
     }
 
+    parameters {
+        string(name: 'CUSTOME_VERSION', defaultValue: 'staging', description: '')
+    }
+
     stages {
         stage('Parallel stagess') {
             parallel {
