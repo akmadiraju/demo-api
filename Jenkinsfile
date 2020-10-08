@@ -7,17 +7,9 @@ pipeline {
     stages {
         stage('Parallel stagess') {
             parallel {
-                stage('Gradle'){
+                stage('Gradle build'){
                     steps {
-                        echo 'Hello, Gradle'
-                        sh '''
-                    
-                    str="Hello Jenkins DSL"
-                    for ele in $str
-                    do
-                       echo $ele
-                    done
-                    '''
+                        sh 'gradle clean build'
                     }
                 }
 
@@ -26,12 +18,14 @@ pipeline {
                     steps {
                         echo 'Hello, JDK'
                         sh 'java -version'
+                    }
+                }
 
+                stage('Upload to artifactory') {
 
-                        withCredentials([usernamePassword(credentialsId: '18dddd54-2b82-4db4-9f44-a3483525cbcc', passwordVariable: 'GIT_PASSWORD', usernameVariable: 'GIT_USER')]) {
-                            // some block
-
-                            sh "git clone https://${GIT_USER}:${GIT_PASSWORD}@github.com/devopsOrg/java-project"
+                    steps {
+                        withCredentials([usernamePassword(credentialsId: 'artifactory', passwordVariable: 'password', usernameVariable: 'username')]) {
+                            sh "gradle -Ppassword=${password} upload"
                         }
                     }
                 }
