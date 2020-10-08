@@ -1,3 +1,5 @@
+@Library('gradle-shared-lib') _
+
 pipeline {
     agent any
     environment {
@@ -9,34 +11,15 @@ pipeline {
     }
 
     stages {
-        stage('Parallel stagess') {
 
             stage('Gradle build'){
                 steps {
-                    sh 'gradle clean build'
-                }
-            }
+                    gradleBuild {
 
-            stage('Example test') {
-
-                steps {
-                    echo 'Hello, JDK'
-                    sh 'java -version'
-                }
-            }
-
-
-            stage('Upload to artifactory') {
-
-                steps {
-                    withCredentials([usernamePassword(credentialsId: 'artifactory', passwordVariable: 'password', usernameVariable: 'username')]) {
-                        sh "gradle -Ppassword=${password} upload"
                     }
                 }
             }
 
-
-        }
 
     }
 }
