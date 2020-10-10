@@ -12,14 +12,28 @@ pipeline {
 
     stages {
 
-            stage('Gradle build'){
-                steps {
-                    gradleBuild {
+        stage('Load resources'){
+            steps{
+                loadResource {
 
-                    }
                 }
             }
+        }
 
+        stage('Gradle build'){
+            steps {
+                gradleBuild {
 
+                }
+            }
+        }
+
+        stage('Build Docker'){
+            steps{
+                runDockerBuild{
+
+                }
+            }
+        }
     }
 }
